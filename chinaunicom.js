@@ -178,7 +178,7 @@ async function query({ cookie }) {
     body = JSON.parse(body)
   } catch (e) {}
   $.log('↓ res body')
-  console.log($.toStr(body))
+  //console.log($.toStr(body))
   const code = String($.lodash_get(body, 'code'))
   const desc = $.lodash_get(body, 'desc')
   let errMsg = '未知错误'
