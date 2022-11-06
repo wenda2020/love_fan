@@ -393,7 +393,7 @@ async function query({ cookie }) {
   console.log('本次记录:')
   console.log(detail)
   console.log('当日初次记录:')
-  console.log(firstDetaildetail)
+  console.log(firstDetail)
   const resourcesDetails = $.lodash_get(detail, 'resources.resources.details')
   const unsharedDetails = $.lodash_get(detail, 'resources.unshared.details')
   const rzbresourcesDetails = $.lodash_get(detail, 'resources.rzbresources.details')
