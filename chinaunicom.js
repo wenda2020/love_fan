@@ -434,6 +434,8 @@ async function query({ cookie }) {
         duration_first = 0
     }
   }
+  detail.duration_firstFree = duration_firstFree
+  detail.duration_firstNotFree = duration_firstNotFree
 
   const otherText = detail.other
     .map(i => {
@@ -461,8 +463,9 @@ async function query({ cookie }) {
   detail.msg = msg
   // 保存 detail
   $.setjson(detail, KEY_DETAIL)
-  if (Todaytimesum <= 1800) {
+  if (Todaytimesum <= 25140) {
     $.setjson(detail, KEY_DETAIL_first)
+    console.log('写入当日初次记录成功')
   }
   // 附加 cookie
   detail.cookie = cookie
@@ -626,6 +629,8 @@ function renderTpl(tpl, data) {
     .replace('[套]', data.packageName || '')
     .replace('[总免]', formatFlow(data.free, 2))
     .replace('[总用]', formatFlow(data.sum, 2))
+    .replace('[当日免]', formatFlow(data.duration_firstFree, 2))
+    .replace('[当日跳]', formatFlow(data.duration_firstNotFree, 2))
     .replace('[总跳]', formatFlow(data.totaluse1, 2))
     .replace('[时]', formatDuration(data.duration))
     .replace('[现]', data.now)
