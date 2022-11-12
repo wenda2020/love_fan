@@ -247,7 +247,7 @@ async function query({ cookie }) {
 
   detail.now = now
   const NowTime = parseFloat(detail.now)/1000
-  const Todaytimesum = (NowTime + 8 * 3600) % 86400
+  const Todaytimesum = Math.floor((NowTime + 8 * 3600) / 86400)
   detail.time = time
   detail.packageName = packageName
   detail.sum = sum
@@ -402,12 +402,14 @@ async function query({ cookie }) {
     console.log(`联通未返回包数据 正常情况 习惯就好 🔚`)
     return
   }
+  let duration_time = 0
   let duration = 0
   let durationFree = 0
   let durationNotFree = 0
   let durationRemain = 0
   let durationTw = 0
   if (lastDetail) {
+    duration_time = Math.floor((parseFloat($.lodash_get(lastDetail, 'now'))/1000 + 8*3600) / 86400)
     duration = (now - parseFloat($.lodash_get(lastDetail, 'now'))) / 1000 / 60
     if (!isNaN(duration) && duration > 0) {
       durationFree = parseFloat(detail.free) - parseFloat($.lodash_get(lastDetail, 'free'))
@@ -463,7 +465,7 @@ async function query({ cookie }) {
   detail.msg = msg
   // 保存 detail
   $.setjson(detail, KEY_DETAIL)
-  if (Todaytimesum <= 25140) {
+  if (duration_time != Todaytimesum ) {
     $.setjson(detail, KEY_DETAIL_first)
     console.log('写入当日初次记录成功')
   }
