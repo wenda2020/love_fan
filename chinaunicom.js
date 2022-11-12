@@ -402,14 +402,12 @@ async function query({ cookie }) {
     console.log(`联通未返回包数据 正常情况 习惯就好 🔚`)
     return
   }
-  let duration_time = 0
   let duration = 0
   let durationFree = 0
   let durationNotFree = 0
   let durationRemain = 0
   let durationTw = 0
   if (lastDetail) {
-    duration_time = Math.floor((parseFloat($.lodash_get(lastDetail, 'now'))/1000 + 8*3600) / 86400)
     duration = (now - parseFloat($.lodash_get(lastDetail, 'now'))) / 1000 / 60
     if (!isNaN(duration) && duration > 0) {
       durationFree = parseFloat(detail.free) - parseFloat($.lodash_get(lastDetail, 'free'))
@@ -420,12 +418,14 @@ async function query({ cookie }) {
       duration = 0
     }
   }
+  let duration_time = 0
   let duration_first = 0
   let duration_firstFree = 0
   let duration_firstNotFree = 0
   let duration_firstRemain = 0
   let duration_firstTw = 0
   if (firstDetail) {
+    duration_time = Math.floor((parseFloat($.lodash_get(firstDetail, 'now'))/1000 + 8*3600) / 86400)
     duration_first = (now - parseFloat($.lodash_get(firstDetail, 'now'))) / 1000 / 60
     if (!isNaN(duration_first) && duration_first > 0) {
       duration_firstFree = parseFloat(detail.free) - parseFloat($.lodash_get(firstDetail, 'free'))
