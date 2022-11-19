@@ -83,9 +83,8 @@ async function operator(proxies = []) {
         _.set(p, 'sni', host)
       }
       if (port) {
-        _.set(p, 'name', ` [${p.port}]${p.name}`)
+        _.set(p, 'name', `[Tj][${p.port}]${p.name}`)
       }
-      _.set(p, 'name', ` [Tj]${p.name}`)
     }
     return p
   })
