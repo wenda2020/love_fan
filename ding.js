@@ -2,10 +2,10 @@ async function operator(proxies = []) {
   const _ = lodash
   
   const host = _.get($arguments, 'host') || 'tms.dingtalk.com'
-  const hostPrefix = _.get($arguments, 'hostPrefix') || '[钉钉混淆]'
+  const hostPrefix = _.get($arguments, 'hostPrefix')
   const hostSuffix = _.get($arguments, 'hostSuffix')
-  const port = _.get($arguments, 'port')  || 80
-  const portPrefix = _.get($arguments, 'portPrefix') || '[80]'
+  const port = _.get($arguments, 'port')
+  const portPrefix = _.get($arguments, 'portPrefix')
   const portSuffix = _.get($arguments, 'portSuffix')
   const path = _.get($arguments, 'path') 
   const pathPrefix = _.get($arguments, 'pathPrefix')
@@ -76,6 +76,16 @@ async function operator(proxies = []) {
           _.set(p, `${network}-opts.path`, path)
         }
       }
+      _.set(p, 'name', ` [Vm]${p.name}`)
+    }
+    if ('trojan' === type) {
+      if (host) {
+        _.set(p, 'sni', host)
+      }
+      if (port) {
+        _.set(p, 'name', ` [${p.port}]${p.name}`)
+      }
+      _.set(p, 'name', ` [Tj]${p.name}`)
     }
     return p
   })
