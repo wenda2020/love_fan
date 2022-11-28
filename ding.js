@@ -77,7 +77,7 @@ async function operator(proxies = []) {
           _.set(p, `${network}-opts.path`, path)
         }
       }
-      _.set(p, 'name', `[Vm]${p.name}`)
+      _.set(p, 'name', `[Vm][${p.port}]${p.name}`)
     }
     if ('trojan' === type) {
       if (host) {
