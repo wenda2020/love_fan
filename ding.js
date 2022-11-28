@@ -31,6 +31,7 @@ async function operator(proxies = []) {
           _.set(p, 'skip-cert-verify', true)
           _.set(p, 'tls-hostname', host)
           _.set(p, 'sni', host)
+          _.set(p, 'name', `[tls]${p.name}`)
         }
         
         if (network === 'ws') {
@@ -76,7 +77,7 @@ async function operator(proxies = []) {
           _.set(p, `${network}-opts.path`, path)
         }
       }
-      _.set(p, 'name', `[Vm][${p.port}]${p.name}`)
+      _.set(p, 'name', `[Vm]${p.name}`)
     }
     if ('trojan' === type) {
       if (host) {
