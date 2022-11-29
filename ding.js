@@ -1,22 +1,30 @@
-async function operator(proxies = []) {
+function operator(proxies = []) {
   const _ = lodash
-  
-  const host = _.get($arguments, 'host') || 'tms.dingtalk.com'
+
+  const host = _.get($arguments, 'host')
   const hostPrefix = _.get($arguments, 'hostPrefix')
   const hostSuffix = _.get($arguments, 'hostSuffix')
   const port = _.get($arguments, 'port')
   const portPrefix = _.get($arguments, 'portPrefix')
   const portSuffix = _.get($arguments, 'portSuffix')
-  const path = _.get($arguments, 'path') 
+  const defaultPath = _.get($arguments, 'defaultPath') || '/'
+  let path = _.get($arguments, 'path')
   const pathPrefix = _.get($arguments, 'pathPrefix')
   const pathSuffix = _.get($arguments, 'pathSuffix')
-  const method = _.get($arguments, 'method') 
-  
+  const defaultMethod = _.get($arguments, 'defaultMethod') || 'GET'
+  let method = _.get($arguments, 'method')
+  const array = _.get($arguments, 'array')
+  const defaultNetwork = _.get($arguments, 'defaultNetwork') || 'http'
+
   return proxies.map((p = {}) => {
-    const network = _.get(p, 'network')
+    let network = _.get(p, 'network')
     const type = _.get(p, 'type')
     /* 只修改 vmess 和 vless */
-    if (_.includes(['vmess', 'vless'], type) && network) {
+    if (_.includes(['vmess', 'vless'], type)) {
+      if (!network) {
+        network = defaultNetwork
+        _.set(p, 'network', defaultNetwork)
+      }
       if (host) {
         if (hostPrefix) {
           _.set(p, 'name', `${hostPrefix}${p.name}`)
@@ -31,24 +39,25 @@ async function operator(proxies = []) {
           _.set(p, 'skip-cert-verify', true)
           _.set(p, 'tls-hostname', host)
           _.set(p, 'sni', host)
-          _.set(p, 'name', `[tls]${p.name}`)
         }
-        
+
         if (network === 'ws') {
           _.set(p, 'ws-opts.headers.Host', host)
         } else if (network === 'h2') {
-          _.set(p, 'h2-opts.host', host)
+          _.set(p, 'h2-opts.host', array ? [host] : host)
         } else if (network === 'http') {
-          _.set(p, 'http-opts.headers.Host', host)
+          _.set(p, 'http-opts.headers.Host', array ? [host] : host)
         } else {
-          _.set(p, `${network}-opts.headers.Host`, [host])
+          // 其他? 谁知道是数组还是字符串...先按数组吧
+          _.set(p, `${network}-opts.headers.Host`, array ? [host] : host)
         }
       }
-      if (method && network === 'http') {
-        // clash meta 核报错 应该不是数组
-        // _.set(p, 'http-opts.headers.method', [method])
-        _.set(p, 'http-opts.headers.method', method)
 
+      if (network === 'http') {
+        if (!_.get(p, 'http-opts.method') && !method) {
+          method = defaultMethod
+        }
+        _.set(p, 'http-opts.method', method)
       }
       if (port) {
         _.set(p, 'port', port)
@@ -59,8 +68,16 @@ async function operator(proxies = []) {
           _.set(p, 'name', `${p.name}${portSuffix}`)
         }
       }
-
-      if (path && network) {
+      if (network === 'http') {
+        let currentPath = _.get(p, 'http-opts.path')
+        if (_.isArray(currentPath)) {
+          currentPath = _.find(currentPath, i => _.startsWith(i, '/'))
+        }
+        if (!_.startsWith(currentPath, '/') && !path) {
+          path = defaultPath
+        }
+      }
+      if (path) {
         if (pathPrefix) {
           _.set(p, 'name', `${pathPrefix}${p.name}`)
         }
@@ -72,8 +89,9 @@ async function operator(proxies = []) {
         } else if (network === 'h2') {
           _.set(p, 'h2-opts.path', path)
         } else if (network === 'http') {
-          _.set(p, 'http-opts.path', [path])
+          _.set(p, 'http-opts.path', array ? [path] : path)
         } else {
+          // 其他? 谁知道是数组还是字符串...先按字符串吧
           _.set(p, `${network}-opts.path`, path)
         }
       }
