@@ -37,9 +37,9 @@ async function operator(proxies = []) {
         if (network === 'ws') {
           _.set(p, 'ws-opts.headers.Host', host)
         } else if (network === 'h2') {
-          _.set(p, 'h2-opts.host', [host])
+          _.set(p, 'h2-opts.host', host)
         } else if (network === 'http') {
-          _.set(p, 'http-opts.headers.Host', [host])
+          _.set(p, 'http-opts.headers.Host', host)
         } else {
           _.set(p, `${network}-opts.headers.Host`, [host])
         }
@@ -77,13 +77,20 @@ async function operator(proxies = []) {
           _.set(p, `${network}-opts.path`, path)
         }
       }
-      _.set(p, 'name', `[Vm][${p.port}]${p.name}`)
+      if (String(p.port) !== '80'){
+        _.set(p, 'name', `[${p.port}]${p.name}`)
+      }
+      _.set(p, 'name', `[Vm]${p.name}`)
     }
     if ('trojan' === type) {
       if (host) {
+        _.set(p, 'skip-cert-verify', true)
         _.set(p, 'sni', host)
       }
-      _.set(p, 'name', `[Tj][${p.port}]${p.name}`)
+      if (String(p.port) === '443'){
+        _.set(p, 'name', `[${p.port}]${p.name}`)
+      }
+      _.set(p, 'name', `[Tj]${p.name}`)
     }
     return p
   })
