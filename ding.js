@@ -104,6 +104,12 @@ function operator(proxies = []) {
       if (host) {
         _.set(p, 'skip-cert-verify', true)
         _.set(p, 'sni', host)
+        if (hostPrefix) {
+          _.set(p, 'name', `${hostPrefix}${p.name}`)
+        }
+        if (hostSuffix) {
+          _.set(p, 'name', `${p.name}${hostSuffix}`)
+        }
       }
       if (String(p.port) === '443'){
         _.set(p, 'name', `[${p.port}]${p.name}`)
