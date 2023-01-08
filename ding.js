@@ -19,7 +19,7 @@ function operator(proxies = []) {
   return proxies.map((p = {}) => {
     let network = _.get(p, 'network')
     const type = _.get(p, 'type')
-    if (p.name.includes('上海|南宁|九江')) {
+    if (p.name.includes('南宁')) {
       _.set(p, 'name', `CN_${p.name}`)
     }
     /* 只修改 vmess 和 vless */
