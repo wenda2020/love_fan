@@ -19,7 +19,7 @@ function operator(proxies = []) {
   return proxies.map((p = {}) => {
     let network = _.get(p, 'network')
     const type = _.get(p, 'type')
-    if (p.name.includes('南宁') || p.name.includes('广州') || p.name.includes('九江') || p.name.includes('福州') || p.name.includes('上海') || p.name.includes('扬州') || p.name.includes('贵州') || p.name.includes('昆明') || p.name.includes('长沙') || p.name.includes('武汉') || p.name.includes('郑州') || p.name.includes('陕西') || p.name.includes('北京') || p.name.includes('兰州') || p.name.includes('西宁') || p.name.includes('呼和浩特') || p.name.includes('乌鲁木齐')) {
+    if (p.name.includes('芜湖') || p.name.includes('杭州') || p.name.includes('济南') || p.name.includes('海南') || p.name.includes('沈阳') || p.name.includes('深圳') || p.name.includes('太原') || p.name.includes('重庆') || p.name.includes('南宁') || p.name.includes('广州') || p.name.includes('九江') || p.name.includes('福州') || p.name.includes('上海') || p.name.includes('扬州') || p.name.includes('贵州') || p.name.includes('昆明') || p.name.includes('长沙') || p.name.includes('武汉') || p.name.includes('郑州') || p.name.includes('陕西') || p.name.includes('北京') || p.name.includes('兰州') || p.name.includes('西宁') || p.name.includes('呼和浩特') || p.name.includes('乌鲁木齐')) {
       _.set(p, 'name', `CN_${p.name}`)
     }
     /* 只修改 vmess 和 vless */
